@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">covid</string>
+    <string name="covid_statistics">COVID STATISTICS</string>
+    <string-array name="sortingOrder">
+        <item>Oldest</item>
+        <item>Newest</item>
+        <item>Highest</item>
+    </string-array>
+</resources>
