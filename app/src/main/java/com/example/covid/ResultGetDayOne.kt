@@ -6,12 +6,12 @@ import java.util.*
 data class ResultGetDayOne (
     @SerializedName("Country")
     var country : String,
-    @SerializedName("CountryCode")
-    var countryCode : String,
-    @SerializedName("Cases")
+    @SerializedName("Confirmed")
     var cases: Int,
-    @SerializedName("Status")
-    var status: String,
+    @SerializedName("Deaths")
+    var deaths: Int,
+    @SerializedName("Recovered")
+    var recovered: Int,
     @SerializedName("Date")
     var date: Date
 )

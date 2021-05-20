@@ -121,11 +121,13 @@ class MainActivity : AppCompatActivity() {
                 response: Response<List<ResultGetCountries>>
             ) {
                 Log.d("Result", "Success : ${response.raw()}")
-                countries = response.body()!!.map{it.country to it.slug}.toMap()
+                if (response.isSuccessful){
+                    countries = response.body()!!.map{it.country to it.slug}.toMap()
 
-                countrySpinner.adapter = ArrayAdapter<String>(
-                    applicationContext, R.layout.support_simple_spinner_dropdown_item, countries.keys.sorted()
-                )
+                    countrySpinner.adapter = ArrayAdapter<String>(
+                        applicationContext, R.layout.support_simple_spinner_dropdown_item, countries.keys.sorted()
+                    )
+                }
             }
 
             override fun onFailure(call : Call<List<ResultGetCountries>>, t : Throwable) {
@@ -135,7 +137,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateStats(slug : String?) {
-        val callGetDayOne = api.getDayOne(slug!!, "confirmed")
+        val callGetDayOne = api.getDayOne(slug!!)
 
         // use coroutine to make an HTTP request
         callGetDayOne.enqueue(object : Callback<List<ResultGetDayOne>> {
@@ -146,10 +148,36 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Result", "Success : ${response.raw()}")
 
                 dailyData.clear()
-                val items = response.body()!!.sortedBy{day -> day.date}
-                val mostCases = items.map{it.cases}.maxOrNull()
+                val items = response.body()
+                val mostCases = items!!.mapIndexed{index, it -> if (index == 0)  it.cases else (it.cases - items[index - 1].cases) }.maxOrNull()
 
-                response.body()!!.forEach{dailyData.add(DailyData(it.date, (it.cases.toDouble() / mostCases!!.toDouble() * 100).toInt()))}
+                var prevCase : Int = 0
+                var prevDeaths : Int = 0
+                var prevRecovered : Int = 0
+                items.forEachIndexed(){
+                    index, it ->
+                    var total : Int
+                    var deaths : Int
+                    var recovered : Int
+
+                    if(index == 0){
+                        total = it.cases
+                        deaths = it.deaths
+                        recovered = it.recovered
+                    }
+                    else {
+                        total = it.cases - items[index - 1].cases
+                        deaths = it.deaths - items[index - 1].deaths
+                        recovered = it.recovered - items[index - 1].recovered
+                    }
+
+                    dailyData.add(DailyData(it.date, (total.toDouble() / mostCases!!.toDouble() * 100).toInt(), total, deaths, recovered))
+                }
+                when(sortBySpinner.selectedItem){
+                    "Oldest"-> dailyData.sortBy{it -> it.date}
+                    "Newest"-> dailyData.sortByDescending{it->it.date}
+                    else -> dailyData.sortByDescending{it->it.cases}
+                }
                 statsRecycler.adapter!!.notifyDataSetChanged()
             }
 

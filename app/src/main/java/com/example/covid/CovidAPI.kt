@@ -8,7 +8,6 @@ interface CovidAPI {
     @GET("countries")
     fun getCountries() : Call<List<ResultGetCountries>>
 
-    @GET("dayone/country/{country}/status/{status}")
-    fun getDayOne(@Path("country") country : String,
-                  @Path("status") status : String) : Call<List<ResultGetDayOne>>
+    @GET("dayone/country/{country}")
+    fun getDayOne(@Path("country") country : String ): Call<List<ResultGetDayOne>>
 }

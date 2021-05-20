@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -24,6 +26,7 @@
 
     <Spinner
         android:id="@+id/countries"
+        android:background="@drawable/boundary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
@@ -32,16 +35,20 @@
         android:layout_alignEnd="@id/title"
         android:layout_alignRight="@id/title"
         android:layout_centerHorizontal="true"
+        android:foregroundGravity="center"
+        android:padding="8dp"
         android:gravity="center"
         android:textAlignment="center" />
 
     <Spinner
+        android:background="@drawable/boundary"
         android:id="@+id/sortBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/countries"
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
+        android:padding="8dp"
         android:layout_toEndOf="@id/countries"
         android:layout_toRightOf="@id/countries"
         android:gravity="center"
@@ -49,11 +56,13 @@
 
     <TextView
         android:id="@+id/title"
+        android:background="@drawable/boundary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
+        android:padding="8dp"
         android:gravity="center"
         android:text="@string/covid_statistics"
         android:textAlignment="center"

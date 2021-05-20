@@ -1,12 +1,15 @@
 package com.example.covid
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.covid.fragments.DetailedStatFragment
 import java.text.DateFormat
 import java.text.DateFormat.MEDIUM
 
@@ -32,6 +35,19 @@ class MainAdapter(private val context: Context, private val dataList: ArrayList<
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(dataList[position], context)
+
+        holder.itemView.setOnClickListener {
+            val activity = it!!.context as AppCompatActivity
+            val detailedStatFragment = DetailedStatFragment()
+            val bundle = Bundle()
+            bundle.putInt("deaths", dataList[position].deaths)
+            bundle.putInt("recovered", dataList[position].recovered)
+            bundle.putInt("cases", dataList[position].cases)
+            bundle.putString("date", DateFormat.getDateInstance(MEDIUM).format(dataList[position].date))
+            detailedStatFragment.arguments = bundle
+            activity.supportFragmentManager.beginTransaction().replace(R.id.main, detailedStatFragment).addToBackStack(null).commit()
+
+        }
     }
 
     override fun getItemCount(): Int {
